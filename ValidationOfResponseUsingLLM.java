@@ -361,27 +361,4 @@ public class ValidationOfResponseUsingLLM implements Nlp {
     }
 
 
-    
-    public static void main(String[] args) throws NlpException {
-
-        NlpRequestModel request = new NlpRequestModel();
-        Map<String, Object> attributes = request.getAttributes();
-
-        attributes.put("Expected_Response", "Hi How are You");
-        attributes.put("Actual_Response", "I am not good no thanks");
-        attributes.put("Azure_API_Key", "4L2tGP38EXoWKzjrOy8D83c5xj7MDwqerHLpJ3QQTeTjV0wQXxP6JQQJ99CBACHYHv6XJ3w3AAAAACOG8jKw"); 
-        attributes.put("Similarity_Threshold", 80);
-        attributes.put("Prompt", "You are an evaluation judge for prompt-based testing.  You will be given: 1. A Prompt (instruction given to an LLM) 2. A Reference Response (expected ideal answer) 3. An Actual Response (LLM-generated answer)  Your task is to evaluate how well the Actual Response satisfies the Prompt, using the Reference Response as a benchmark for correctness and completeness.  Evaluation Rules: - Compare Actual Response against both the Prompt and Reference Response. - Check if all required instructions in the prompt are followed. - Verify factual correctness and completeness using the reference response. - Do NOT penalize for wording differences if meaning is preserved. - Do NOT reward correct structure if core content is wrong. - Penalize:   - Missing key information   - Incorrect or hallucinated content   - Deviations from instructions   - Extra irrelevant or fabricated details - Be strict and objective.  Scoring Guidelines: - 0 = Completely incorrect or irrelevant - 50 = Partially correct, major gaps or issues - 100 = Fully correct, matches intent and completeness of reference  Score must be an INTEGER between 0 and 100. Do NOT return decimals. Do NOT return probability scale.  Output strictly in JSON format:  {   \"Prompt Adherence Score\": Number,   \"Reason for Score\": \"Detailed explanation including:     - Coverage vs reference response     - Missing or incorrect information     - Instruction adherence     - Any hallucinations or extra content     - Overall quality vs expected output\" }  =================================  Now evaluate the following:  Prompt:Not Provided"
-        );
-
-        ValidationOfResponseUsingLLM obj = new ValidationOfResponseUsingLLM();
-        NlpResponseModel result = obj.execute(request);
-
-        System.out.println("Status  : " + result.getStatus());
-        System.out.println("Message : " + result.getMessage());
-        System.out.println("Output  : " + result.getAttributes());
-        Map resultMap = (Map) result.getAttributes().get("Result");
-        System.out.println (resultMap.get("Similarity_Score"));
-        System.out.println(resultMap.get("Reason"));
-    }
 }
